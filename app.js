@@ -3,14 +3,18 @@ const resetBtn = document.querySelector('#reset')
 
 const p1 = {
     score: 0,
+    overallScore: 0,
     button:document.querySelector('#p1Add'),
-    display:document.querySelector('#p1Display')
+    display:document.querySelector('#p1Display'),
+    overall:document.querySelector('#p1Overall')
 }
 
 const p2 = {
     score: 0,
+    overallScore: 0,
     button: document.querySelector('#p2Add'),
-    display: document.querySelector('#p2Display')
+    display: document.querySelector('#p2Display'),
+    overall: document.querySelector('#p2Overall')
 }
 
 let winningScore = 3;
