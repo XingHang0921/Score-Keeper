@@ -18,57 +18,65 @@ const p2 = {
     display: document.querySelector('#p2Display'),
     overall: document.querySelector('#p2Overall')
 }
-let roundScore = 3
+let roundScore = 3;
 let winningScore = 3;
 let isGameOver = false;
 let isRoundOver = false;
 let winner = null
+
 function updateScore(player, opponent){
     if(!isRoundOver){
-        player.score += 1
-        player.display.textContent = player.score
+        player.score += 1;
+        player.display.textContent = player.score;
         if(player.score === winningScore){
             isRoundOver = true;
             player.display.classList.add('has-text-success')
             opponent.display.classList.add('has-text-danger')
             player.button.disabled = true;
             opponent.button.disabled = true;
-            winner = player
-            nextRound.classList.toggle('is-hidden')
+            winner = player;
+            nextRound.classList.toggle('is-hidden');
         }
     }
 }
-nextRound.addEventListener('click', function(){
-    if(!isRoundOver)
-    {
-        if(winner)
+
+function updateOverallScore(player, opponent){
+    if(!isGameOver)
         {
-            winner.overallScore += 1
-            winner.overall.textContent = winner.overallScore
-            winner = null
-            reset()
-            if(winner.overallScore === roundScore){
-                alert('congrates on thw winner')
+            if(winner)
+            {
+                winner.overallScore += 1;
+                winner.overall.textContent = winner.overallScore;
+                winner = null;
+                reset();
+                if(winner.overallScore === roundScore){
+                    isGameOver = true;
+
+                    alert('congrates on the winner');
+                }
             }
         }
-    }
+        nextRound.classList.toggle('is-hidden');
+}
+nextRound.addEventListener('click', function(){
+    updateOverallScore(winner); // build a generic function 
 })
 
 p1.button.addEventListener('click', function() {
-    updateScore(p1, p2)
+    updateScore(p1, p2);
 })
 
 p2.button.addEventListener('click', function() {
-    updateScore(p2,p1)
+    updateScore(p2,p1);
 })
 
 winningScoreSelect.addEventListener('change',function(){
     winningScore = parseInt(this.value);
-    reset()
+    reset();
 })
 roundToSelect.addEventListener('change', function(){
     roundScore = parseInt(this.value);
-    reset()
+    reset();
 })
 
 resetBtn.addEventListener('click', reset)
