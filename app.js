@@ -34,22 +34,24 @@ function updateScore(player, opponent){
             player.button.disabled = true;
             opponent.button.disabled = true;
             winner = player
+            nextRound.classList.toggle('is-hidden')
         }
     }
 }
 nextRound.addEventListener('click', function(){
-    if(!isRoundOver){
-        if(winner){
-        winner.overallScore += 1
-        winner.overall.textContent = winner.overallScore
-        winner = null
-        reset()
-        if
+    if(!isRoundOver)
+    {
+        if(winner)
+        {
+            winner.overallScore += 1
+            winner.overall.textContent = winner.overallScore
+            winner = null
+            reset()
+            if(winner.overallScore === roundScore){
+                alert('congrates on thw winner')
+            }
         }
-    }else{
-        alert('congrates on thw winner')
     }
-    
 })
 
 p1.button.addEventListener('click', function() {
@@ -71,13 +73,12 @@ roundToSelect.addEventListener('change', function(){
 
 resetBtn.addEventListener('click', reset)
 
-
 function reset(){
     isGameOver = false;
     isRoundOver = false;
+    nextRound.classList.toggle('is-hidden')
     for(let p of [p1,p2]){
         p.score = 0;
-        p.overall = 0;
         p.display.textContent = p.score;
         p.button.disabled = false;
         p.display.classList.remove('has-text-success', 'has-text-danger');
