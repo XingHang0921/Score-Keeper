@@ -74,7 +74,7 @@ resetBtn.addEventListener('click', function() {
     }
     
 })
-///////////////////////////////////////////////////////////////////////////////////
+
 function updateOverallScore(winner, loser){
     nextRound.classList.add('is-hidden');
     if(!isGameOver && winner)
