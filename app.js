@@ -24,6 +24,13 @@ let isGameOver = false;
 let isRoundOver = false;
 let winner = null
 
+winningScoreSelect.addEventListener('change',function(){
+    winningScore = parseInt(this.value);
+    if(isGameOver) 
+        resetGame(); 
+    else reset();
+})
+
 function updateScore(player, opponent){
     if(!isRoundOver){
         player.score += 1;
@@ -35,32 +42,10 @@ function updateScore(player, opponent){
             player.button.disabled = true;
             opponent.button.disabled = true;
             winner = player;
-            nextRound.classList.toggle('is-hidden');
+            nextRound.classList.remove('is-hidden');
         }
     }
 }
-
-function updateOverallScore(player, opponent){
-    if(!isGameOver)
-        {
-            if(winner)
-            {
-                winner.overallScore += 1;
-                winner.overall.textContent = winner.overallScore;
-                winner = null;
-                reset();
-                if(winner.overallScore === roundScore){
-                    isGameOver = true;
-
-                    alert('congrates on the winner');
-                }
-            }
-        }
-        nextRound.classList.toggle('is-hidden');
-}
-nextRound.addEventListener('click', function(){
-    updateOverallScore(winner); // build a generic function 
-})
 
 p1.button.addEventListener('click', function() {
     updateScore(p1, p2);
@@ -70,21 +55,9 @@ p2.button.addEventListener('click', function() {
     updateScore(p2,p1);
 })
 
-winningScoreSelect.addEventListener('change',function(){
-    winningScore = parseInt(this.value);
-    reset();
-})
-roundToSelect.addEventListener('change', function(){
-    roundScore = parseInt(this.value);
-    reset();
-})
-
-resetBtn.addEventListener('click', reset)
-
 function reset(){
-    isGameOver = false;
     isRoundOver = false;
-    nextRound.classList.toggle('is-hidden')
+    nextRound.classList.add('is-hidden')
     for(let p of [p1,p2]){
         p.score = 0;
         p.display.textContent = p.score;
@@ -92,3 +65,57 @@ function reset(){
         p.display.classList.remove('has-text-success', 'has-text-danger');
     }
 }
+
+resetBtn.addEventListener('click', function() {
+    if (isGameOver) {
+        resetGame();
+    }else{
+        reset();
+    }
+    
+})
+///////////////////////////////////////////////////////////////////////////////////
+function updateOverallScore(winner, loser){
+    nextRound.classList.add('is-hidden');
+    if(!isGameOver && winner)
+    {
+        winner.overallScore += 1;
+        winner.overall.textContent = winner.overallScore;
+        reset();
+        if(winner.overallScore === roundScore){
+            isGameOver = true;
+            winner.overall.classList.add('has-text-success')
+            loser.overall.classList.add('has-text-danger')
+            winner.button.disabled = true;
+            loser.button.disabled = true;
+        }
+    }
+    winner = null;
+}
+
+nextRound.addEventListener('click', function() {
+    let loser = (winner === p1)? p2:p1;
+    updateOverallScore(winner, loser);
+})
+
+function resetGame(){
+    isGameOver = false;
+    isRoundOver = false;
+    nextRound.classList.add('is-hidden')
+    for(let p of [p1,p2]){
+        p.score = 0;
+        p.overallScore = 0;
+        p.overall.textContent = p.overallScore;
+        p.display.textContent = p.score;
+        p.button.disabled = false;
+        p.display.classList.remove('has-text-success', 'has-text-danger');
+        p.overall.classList.remove('has-text-success', 'has-text-danger');
+    }
+}
+
+roundToSelect.addEventListener('change', function(){
+    roundScore = parseInt(this.value);
+    resetGame();
+})
+
+
